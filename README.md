@@ -6,7 +6,6 @@ This branch focuses on implementing Steam authentication for the 2M application,
 
 ### What Works
 
-- **Particle Background**: The particle background animation has been fixed to properly handle TypeScript null checks.
 - **Basic Project Structure**: The Next.js application structure is in place with proper routing.
 - **Steam Authentication API Routes**: Basic API routes for Steam authentication have been created:
   - `/api/auth/steam/route.ts`: Initiates the Steam authentication flow
