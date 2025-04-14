@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export default function PageThree() {
   return (
-    <main className="relative min-h-screen flex flex-col items-center bg-black text-white">
+    <main className="relative min-h-screen max-h-screen flex flex-col items-center bg-black text-white overflow-hidden">
       <nav className="w-full py-4 px-6 grid grid-cols-3 items-center z-10">
         <div className="flex justify-start">
           <Link href="/" className="flex items-center">

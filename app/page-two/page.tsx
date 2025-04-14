@@ -24,7 +24,7 @@ export default function PageTwo() {
   }, [])
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center bg-black text-white">
+    <main className="relative min-h-screen max-h-screen flex flex-col items-center bg-black text-white overflow-hidden">
       <AnimatePresence>
         {!inSession && (
           <motion.nav
