@@ -31,10 +31,13 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex justify-end">
-          <button className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2">
+          <Link 
+            href="/api/auth/steam" 
+            className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
+          >
             <Image src="/icons8-steam.svg" alt="Steam" width={24} height={24} />
             Sign in with Steam
-          </button>
+          </Link>
         </div>
       </nav>
 
