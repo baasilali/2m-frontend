@@ -6,6 +6,7 @@ import { Activity, ShoppingBag } from "lucide-react"
 import { CounterStrikeChat } from "@/components/counter-strike-chat"
 import { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
 
 export default function PageTwo() {
   const [backgroundVisible, setBackgroundVisible] = useState(true)
@@ -33,8 +34,8 @@ export default function PageTwo() {
             className="w-full py-4 px-6 grid grid-cols-3 items-center z-10"
           >
             <div className="flex justify-start">
-              <Link href="/" className="text-2xl font-bold">
-                2m
+              <Link href="/" className="flex items-center">
+                <Image src="/logo.png" alt="2m Logo" width={150} height={24} />
               </Link>
             </div>
             <div className="flex justify-center space-x-4">

@@ -1,13 +1,14 @@
 import Link from "next/link"
 import { Activity, ShoppingBag } from "lucide-react"
+import Image from "next/image"
 
 export default function PageThree() {
   return (
     <main className="relative min-h-screen flex flex-col items-center bg-black text-white">
       <nav className="w-full py-4 px-6 grid grid-cols-3 items-center z-10">
         <div className="flex justify-start">
-          <Link href="/" className="text-2xl font-bold">
-            2m
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" alt="2m Logo" width={150} height={24} />
           </Link>
         </div>
         <div className="flex justify-center space-x-4">
