@@ -228,9 +228,12 @@ export function CounterStrikeChat() {
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: 100, transition: { duration: 0.5, ease: "easeInOut" } }}
-            className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-8"
+            className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-4"
           >
-            <h1 className="text-4xl font-bold text-white">Everything Counter Strike</h1>
+            <h1 className="text-4xl font-bold text-white mb-0">Everything Counter Strike</h1>
+            <p className="text-gray-400 text-center max-w-2xl">
+              Ask about skin prices, market trends, or anything else.
+            </p>
 
             <div className="w-3/4 mx-auto">
               <div className="relative bg-neutral-900 rounded-xl border border-neutral-800">
@@ -441,12 +444,12 @@ export function CounterStrikeChat() {
                 // Empty state when no session is selected but sidebar is visible
                 <div className="flex-1 flex flex-col items-center justify-center p-4">
                   <div className="text-center space-y-4">
-                    <h2 className="text-2xl font-bold text-white">Start a new conversation</h2>
+                    <h2 className="text-2xl font-bold text-white">What can I help you with?</h2>
                     <p className="text-neutral-400">
-                      Ask anything about Counter Strike - weapons, maps, strategies, and more.
+                    Ask about skin prices, market trends, or anything else.
                     </p>
 
-                    <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-3/4 max-w-xl mx-auto mt-6">
+                    <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-full max-w-3xl mx-auto mt-6">
                       <div className="overflow-y-auto">
                         <Textarea
                           ref={textareaRef}

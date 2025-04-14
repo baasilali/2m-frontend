@@ -31,7 +31,7 @@ export default function PageThree() {
       </nav>
 
       <div className="flex-1 flex items-center justify-center z-10">
-        <h1 className="text-4xl font-bold">Marketplace</h1>
+        <h1 className="text-4xl font-bold">Coming Soon!</h1>
       </div>
 
       {/* No background component here - blank background */}
