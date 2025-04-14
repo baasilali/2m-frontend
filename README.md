@@ -17,7 +17,6 @@ This branch focuses on implementing Steam authentication for the 2M application,
 
 - **Steam Authentication Flow**: The authentication flow is not fully functional yet
 - **User Session Management**: User sessions are not being properly stored or managed
-- **Environment Variables**: Steam API keys and other environment variables need to be configured
 
 ### What Needs to Be Implemented
 
@@ -32,13 +31,11 @@ This branch focuses on implementing Steam authentication for the 2M application,
    - Add user profile management features
 
 3. **UI Components**:
-   - Create a sign-in button component
    - Design and implement a user profile page
    - Add loading states and error messages for authentication processes
 
 4. **Security**:
    - Implement proper session management with secure cookies
-   - Add CSRF protection
    - Set up proper environment variable handling
 
 5. **Testing**:
@@ -59,12 +56,6 @@ This branch focuses on implementing Steam authentication for the 2M application,
 1. Clone the repository
 2. Checkout the signin branch: `git checkout signin`
 3. Install dependencies: `npm install` or `yarn install`
-4. Create a `.env.local` file with the following variables:
-   ```
-   STEAM_API_KEY=your_steam_api_key
-   NEXTAUTH_SECRET=your_nextauth_secret
-   NEXTAUTH_URL=http://localhost:3000
-   ```
 5. Run the development server: `npm run dev` or `yarn dev`
 
 ## Next Steps
