@@ -32,8 +32,8 @@ export function ParticleBackground({ className, ...props }: ParticleBackgroundPr
       color: string
 
       constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+        this.x = Math.random() * canvas!.width
+        this.y = Math.random() * canvas!.height
         this.directionX = (Math.random() - 0.5) * 0.5
         this.directionY = (Math.random() - 0.5) * 0.5
         this.size = Math.random() * 2 + 1
@@ -41,10 +41,10 @@ export function ParticleBackground({ className, ...props }: ParticleBackgroundPr
       }
 
       update() {
-        if (this.x > canvas.width || this.x < 0) {
+        if (this.x > canvas!.width || this.x < 0) {
           this.directionX = -this.directionX
         }
-        if (this.y > canvas.height || this.y < 0) {
+        if (this.y > canvas!.height || this.y < 0) {
           this.directionY = -this.directionY
         }
 
@@ -53,10 +53,10 @@ export function ParticleBackground({ className, ...props }: ParticleBackgroundPr
       }
 
       draw() {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-        ctx.fillStyle = this.color
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        ctx!.fillStyle = this.color
+        ctx!.fill()
       }
     }
 
@@ -76,19 +76,19 @@ export function ParticleBackground({ className, ...props }: ParticleBackgroundPr
 
           if (distance < connectionDistance) {
             const opacity = 1 - distance / connectionDistance
-            ctx.strokeStyle = `rgba(156, 163, 175, ${opacity})`
-            ctx.lineWidth = 1
-            ctx.beginPath()
-            ctx.moveTo(particles[a].x, particles[a].y)
-            ctx.lineTo(particles[b].x, particles[b].y)
-            ctx.stroke()
+            ctx!.strokeStyle = `rgba(156, 163, 175, ${opacity})`
+            ctx!.lineWidth = 1
+            ctx!.beginPath()
+            ctx!.moveTo(particles[a].x, particles[a].y)
+            ctx!.lineTo(particles[b].x, particles[b].y)
+            ctx!.stroke()
           }
         }
       }
     }
 
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
       for (let i = 0; i < particles.length; i++) {
         particles[i].update()
         particles[i].draw()
@@ -98,8 +98,8 @@ export function ParticleBackground({ className, ...props }: ParticleBackgroundPr
     }
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      canvas!.width = window.innerWidth
+      canvas!.height = window.innerHeight
       init()
     }
 
