@@ -64,7 +64,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Image src="/discord-white-icon.svg" alt="Discord" width={18} height={18} />
+                <Image src="/svgviewer-output.svg" alt="Discord" width={18} height={18} />
                 Discord
               </Link>
               
