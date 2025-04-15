@@ -4,8 +4,9 @@ import type { Metadata } from 'next'
 import { Unbounded } from 'next/font/google'
 // Removed usePathname import
 import './globals.css'
-// Import the new component (will create it next)
-import { ConditionalHeader } from '@/components/conditional-header' 
+import { Header } from '@/components/header' // Import Header directly
+import { ThemeProvider } from "@/components/theme-provider" // Import ThemeProvider
+// Removed import for ConditionalHeader
 
 // Initialize Unbounded font
 const unbounded = Unbounded({
@@ -35,16 +36,25 @@ export default function RootLayout({
 }>) {
   // Removed pathname logic
   return (
-    <html lang="en" className="bg-black">
+    <html lang="en" className="bg-black" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
       </head>
-      <body className={`${unbounded.variable} font-sans min-h-screen bg-black text-white relative`}>
-        {/* Render the new conditional component */}
-        <ConditionalHeader /> 
-        {children}
+      <body 
+        className={`${unbounded.variable} font-sans min-h-screen bg-black text-white relative`} 
+        suppressHydrationWarning={true} 
+      >
+        {/* Wrap content with ThemeProvider */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false} // Disable system theme detection for simplicity
+        >
+          <Header /> 
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
