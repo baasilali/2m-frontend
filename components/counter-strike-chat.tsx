@@ -227,7 +227,7 @@ export function CounterStrikeChat() {
             key="chat-input"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: 100, transition: { duration: 0.5, ease: "easeInOut" } }}
+            exit={{ opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
             className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-4"
           >
             <h1 className="text-4xl font-bold text-white mb-0">Everything Counter Strike</h1>

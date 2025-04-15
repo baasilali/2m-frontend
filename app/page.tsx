@@ -1,43 +1,13 @@
 import Link from "next/link"
 import { BackgroundPaths } from "@/components/background-paths"
-import { Activity, ShoppingBag, Twitter, Mail } from "lucide-react"
+import { Twitter, Mail } from "lucide-react"
 import Image from "next/image"
 import { CardSpotlight } from "@/components/card-spotlight"
 import { Step } from "@/components/step"
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen max-h-screen flex flex-col items-center bg-black text-white overflow-hidden">
-      <nav className="w-full py-4 px-6 grid grid-cols-3 items-center z-10">
-        <div className="flex justify-start">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="2m Logo" width={150} height={24} />
-          </Link>
-        </div>
-        <div className="flex justify-center space-x-4">
-          <Link
-            href="/page-two"
-            className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
-          >
-            <Activity size={18} />
-            AI
-          </Link>
-          <Link
-            href="/page-three"
-            className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
-          >
-            <ShoppingBag size={18} />
-            Marketplace
-          </Link>
-        </div>
-        <div className="flex justify-end">
-          <button className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2">
-            <Image src="/icons8-steam.svg" alt="Steam" width={24} height={24} />
-            Sign in with Steam
-          </button>
-        </div>
-      </nav>
-
+    <main className="relative min-h-screen flex flex-col items-center bg-black text-white overflow-hidden">
       <div className="flex-1 flex items-center justify-center z-10 w-full max-w-6xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col justify-center items-center text-center">
