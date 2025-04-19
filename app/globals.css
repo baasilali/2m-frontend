@@ -127,3 +127,15 @@ html::after {
     @apply bg-background text-foreground;
   }
 }
+
+/* Make header non-sticky when chat is active */
+body.chat-active nav {
+  position: static !important; /* Use !important to ensure override */
+  margin-top: 0 !important; /* Remove the margin-top as well */
+}
+
+/* Adjust header background when chat is active */
+body.chat-active nav {
+  background-color: rgba(0, 0, 0, 0.5) !important; /* Semi-transparent black */
+  backdrop-filter: blur(8px) !important; /* Add blur effect */
+}

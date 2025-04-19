@@ -5,7 +5,7 @@ import type React from "react"
 import { useEffect, useRef, useCallback, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { ArrowUpIcon, Paperclip, PlusCircle, MessageSquare, ChevronLeft } from "lucide-react"
+import { ArrowUpIcon, Paperclip, MessageSquarePlus, MessageSquare, Minimize2, User } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TextShimmer } from "@/components/ui/text-shimmer"
 
@@ -78,6 +78,17 @@ export function CounterStrikeChat() {
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null)
   const [backgroundVisible, setBackgroundVisible] = useState(true)
+  const messagesContainerRef = useRef<HTMLDivElement>(null); // Ref for message container
+
+  // Prevent body scrolling
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+  }, [])
 
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
     minHeight: 60,
@@ -92,6 +103,15 @@ export function CounterStrikeChat() {
     })
     window.dispatchEvent(event)
   }, [inSession, backgroundVisible])
+
+  // Add useEffect for scrolling
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      const { scrollHeight, clientHeight } = messagesContainerRef.current;
+      // Use scrollTop for smooth scrolling to the bottom
+      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  }, [currentSession?.messages]); // Trigger when messages change
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -221,15 +241,15 @@ export function CounterStrikeChat() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full h-full">
-      <AnimatePresence>
+    <div className="flex flex-col items-center w-full h-[calc(100vh-5rem)] overflow-hidden">
+      <AnimatePresence mode="wait">
         {initialState && !inSession ? (
           <motion.div
             key="chat-input"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
-            className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-4"
+            className="flex flex-col justify-start items-center w-full max-w-4xl h-full mx-auto p-4 mt-40 space-y-4 overflow-hidden"
           >
             <TextShimmer as="h1" className="text-4xl font-bold mb-0">
               Everything Counter Strike
@@ -238,7 +258,7 @@ export function CounterStrikeChat() {
               Ask about skin prices, market trends, or anything else.
             </p>
 
-            <div className="w-3/4 mx-auto">
+            <div className="w-3/4 mx-auto mt-auto">
               <div className="relative bg-neutral-900 rounded-xl border border-neutral-800">
                 <div className="overflow-y-auto">
                   <Textarea
@@ -297,19 +317,19 @@ export function CounterStrikeChat() {
         ) : (
           <motion.div
             key="chat-session"
-            initial={{ opacity: 0, y: 100, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex w-full h-screen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex w-full h-[calc(100vh-5rem)]"
           >
             {/* Sidebar */}
             <motion.div
               className={cn(
-                "bg-neutral-900 border-r border-neutral-800 h-full transition-all duration-300",
-                sidebarOpen ? "w-64" : "w-16",
+                "bg-neutral-900 border-r border-neutral-800 h-full transition-all duration-300 flex flex-col",
+                sidebarOpen ? "w-64" : "w-20",
               )}
-              initial={{ width: sidebarOpen ? 256 : 64 }}
-              animate={{ width: sidebarOpen ? 256 : 64 }}
+              initial={{ width: sidebarOpen ? 256 : 80 }}
+              animate={{ width: sidebarOpen ? 256 : 80 }}
             >
               <div className="p-3 flex items-center justify-between border-b border-neutral-800">
                 <div className="flex items-center gap-2">
@@ -317,27 +337,18 @@ export function CounterStrikeChat() {
                     onClick={startNewChat}
                     className="flex items-center gap-2 p-2 rounded-md hover:bg-neutral-800 text-white"
                   >
-                    <PlusCircle className="h-5 w-5" />
+                    <MessageSquarePlus className="h-5 w-5" />
                     {sidebarOpen && <span>New Chat</span>}
                   </button>
-
-                  {sidebarOpen && (
-                    <button
-                      onClick={exitChat}
-                      className="p-2 rounded-md hover:bg-neutral-800 text-neutral-400 hover:text-white"
-                    >
-                      Exit
-                    </button>
-                  )}
                 </div>
-                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 rounded-md hover:bg-neutral-800">
-                  <ChevronLeft
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 -ml-1 rounded-md hover:bg-neutral-800">
+                  <Minimize2
                     className={cn("h-5 w-5 text-neutral-400 transition-transform", !sidebarOpen && "rotate-180")}
                   />
                 </button>
               </div>
 
-              <div className="p-2">
+              <div className="flex-1 p-2 overflow-y-auto">
                 <div className="mt-2 space-y-1">
                   {sessions.map((session, index) => (
                     <button
@@ -351,165 +362,130 @@ export function CounterStrikeChat() {
                       )}
                     >
                       <MessageSquare className="h-4 w-4 flex-shrink-0" />
-                      {sidebarOpen && <span className="truncate text-sm">Chat {index + 1}</span>}
+                      {sidebarOpen && (
+                        <span className="truncate text-sm">
+                          {session.messages[0]?.content.split(' ').slice(0, 3).join(' ')}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
               </div>
-            </motion.div>
 
-            {/* Chat Area */}
-            <div className="flex-1 flex flex-col">
-              {currentSession ? (
-                <>
-                  {/* Messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    <div className="w-3/4 mx-auto">
-                      {currentSession.messages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={cn("flex mb-4", message.isUser ? "justify-end" : "justify-start")}
-                        >
-                          <div
-                            className={cn(
-                              "p-3 rounded-lg inline-block",
-                              getBubbleSizeClass(message.content),
-                              message.isUser ? "bg-primary text-primary-foreground" : "bg-neutral-800 text-white",
-                            )}
-                          >
-                            {message.content}
-                          </div>
-                        </div>
-                      ))}
+              {/* User Profile Section */}
+              {sidebarOpen && (
+                <div className="p-3 border-t border-neutral-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center">
+                      <User className="w-5 h-5 text-neutral-400" />
                     </div>
-                  </div>
-
-                  {/* Input Area */}
-                  <div className="p-4">
-                    <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-3/4 mx-auto">
-                      <div className="overflow-y-auto">
-                        <Textarea
-                          ref={textareaRef}
-                          value={value}
-                          onChange={(e) => {
-                            setValue(e.target.value)
-                            adjustHeight()
-                          }}
-                          onKeyDown={handleKeyDown}
-                          placeholder="Ask about Counter Strike..."
-                          className={cn(
-                            "w-full px-4 py-3",
-                            "resize-none",
-                            "bg-transparent",
-                            "border-none",
-                            "text-white text-sm",
-                            "focus:outline-none",
-                            "focus-visible:ring-0 focus-visible:ring-offset-0",
-                            "placeholder:text-neutral-500 placeholder:text-sm",
-                            "min-h-[60px]",
-                          )}
-                          style={{
-                            overflow: "hidden",
-                          }}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            className="group p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-1"
-                          >
-                            <Paperclip className="w-4 h-4 text-white" />
-                            <span className="text-xs text-zinc-400 hidden group-hover:inline transition-opacity">
-                              Attach
-                            </span>
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={handleSendMessage}
-                            className={cn(
-                              "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1",
-                              value.trim() ? "bg-white text-black" : "text-zinc-400",
-                            )}
-                          >
-                            <ArrowUpIcon className={cn("w-4 h-4", value.trim() ? "text-black" : "text-zinc-400")} />
-                            <span className="sr-only">Send</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                // Empty state when no session is selected but sidebar is visible
-                <div className="flex-1 flex flex-col items-center justify-center p-4">
-                  <div className="text-center space-y-4">
-                    <h2 className="text-2xl font-bold text-white">What can I help you with?</h2>
-                    <p className="text-neutral-400">
-                    Ask about skin prices, market trends, or anything else.
-                    </p>
-
-                    <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-full max-w-3xl mx-auto mt-6">
-                      <div className="overflow-y-auto">
-                        <Textarea
-                          ref={textareaRef}
-                          value={value}
-                          onChange={(e) => {
-                            setValue(e.target.value)
-                            adjustHeight()
-                          }}
-                          onKeyDown={handleKeyDown}
-                          placeholder="Ask about Counter Strike..."
-                          className={cn(
-                            "w-full px-4 py-3",
-                            "resize-none",
-                            "bg-transparent",
-                            "border-none",
-                            "text-white text-sm",
-                            "focus:outline-none",
-                            "focus-visible:ring-0 focus-visible:ring-offset-0",
-                            "placeholder:text-neutral-500 placeholder:text-sm",
-                            "min-h-[60px]",
-                          )}
-                          style={{
-                            overflow: "hidden",
-                          }}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between p-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            className="group p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-1"
-                          >
-                            <Paperclip className="w-4 h-4 text-white" />
-                            <span className="text-xs text-zinc-400 hidden group-hover:inline transition-opacity">
-                              Attach
-                            </span>
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={handleSendMessage}
-                            className={cn(
-                              "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1",
-                              value.trim() ? "bg-white text-black" : "text-zinc-400",
-                            )}
-                          >
-                            <ArrowUpIcon className={cn("w-4 h-4", value.trim() ? "text-black" : "text-zinc-400")} />
-                            <span className="sr-only">Send</span>
-                          </button>
-                        </div>
-                      </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-white">Guest</span>
+                      <span className="text-xs text-neutral-400">Free Account</span>
                     </div>
                   </div>
                 </div>
               )}
+            </motion.div>
+
+            {/* Chat Area */}
+            <div className="flex-1 flex flex-col h-full">
+              <div className="flex-1 overflow-y-auto p-4" ref={messagesContainerRef}>
+                <AnimatePresence mode="wait">
+                  {!inSession && backgroundVisible && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex flex-col items-center justify-center h-full gap-4 mt-40"
+                    >
+                      <TextShimmer as="h1" className="text-4xl font-bold mb-0">
+                        Everything Counter Strike
+                      </TextShimmer>
+                      <p className="text-gray-400 text-center max-w-2xl">
+                        Ask about skin prices, market trends, or anything else.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                {currentSession && (
+                  <div className="w-3/4 mx-auto">
+                    {currentSession.messages.map((message) => (
+                      <div
+                        key={message.id}
+                        className={cn("flex mb-4", message.isUser ? "justify-end" : "justify-start")}
+                      >
+                        <div
+                          className={cn(
+                            "p-3 rounded-lg inline-block",
+                            getBubbleSizeClass(message.content),
+                            message.isUser ? "bg-primary text-primary-foreground" : "bg-neutral-800 text-white",
+                          )}
+                        >
+                          {message.content}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex-none p-4">
+                <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-3/4 mx-auto">
+                  <div className="overflow-y-auto">
+                    <Textarea
+                      ref={textareaRef}
+                      value={value}
+                      onChange={(e) => {
+                        setValue(e.target.value)
+                        adjustHeight()
+                      }}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Ask about Counter Strike..."
+                      className={cn(
+                        "w-full px-4 py-3",
+                        "resize-none",
+                        "bg-transparent",
+                        "border-none",
+                        "text-white text-sm",
+                        "focus:outline-none",
+                        "focus-visible:ring-0 focus-visible:ring-offset-0",
+                        "placeholder:text-neutral-500 placeholder:text-sm",
+                        "min-h-[60px]",
+                      )}
+                      style={{
+                        overflow: "hidden",
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-3">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        className="group p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-1"
+                      >
+                        <Paperclip className="w-4 h-4 text-white" />
+                        <span className="text-xs text-zinc-400 hidden group-hover:inline transition-opacity">
+                          Attach
+                        </span>
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSendMessage}
+                        className={cn(
+                          "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1",
+                          value.trim() ? "bg-white text-black" : "text-zinc-400",
+                        )}
+                      >
+                        <ArrowUpIcon className={cn("w-4 h-4", value.trim() ? "text-black" : "text-zinc-400")} />
+                        <span className="sr-only">Send</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

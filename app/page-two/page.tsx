@@ -15,17 +15,30 @@ export default function PageTwo() {
   // Listen for session state changes from the chat component
   useEffect(() => {
     const handleSessionChange = (e: CustomEvent) => {
-      setInSession(e.detail.inSession)
+      const sessionActive = e.detail.inSession
+      setInSession(sessionActive)
       setBackgroundVisible(e.detail.backgroundVisible)
+
+      // Add/remove class on body
+      if (sessionActive) {
+        document.body.classList.add("chat-active")
+      } else {
+        document.body.classList.remove("chat-active")
+      }
     }
 
     window.addEventListener("sessionStateChange", handleSessionChange as EventListener)
-    return () => window.removeEventListener("sessionStateChange", handleSessionChange as EventListener)
+    
+    // Cleanup function to remove class when component unmounts
+    return () => {
+      window.removeEventListener("sessionStateChange", handleSessionChange as EventListener)
+      document.body.classList.remove("chat-active") // Ensure class is removed on unmount
+    }
   }, [])
 
   return (
     <main className="relative min-h-screen max-h-screen flex flex-col items-center bg-black text-white overflow-hidden">
-      <div className={`flex-1 flex items-center justify-center z-10 w-full ${inSession ? "h-screen" : ""}`}>
+      <div className={`flex-1 flex z-10 w-full h-full`}>
         <CounterStrikeChat />
       </div>
 

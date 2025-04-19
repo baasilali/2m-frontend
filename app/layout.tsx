@@ -1,12 +1,7 @@
-// Removed "use client"
-
 import type { Metadata } from 'next'
 import { Unbounded } from 'next/font/google'
-// Removed usePathname import
 import './globals.css'
-import { Header } from '@/components/header' // Import Header directly
-import { ThemeProvider } from "@/components/theme-provider" // Import ThemeProvider
-// Removed import for ConditionalHeader
+import { ClientLayout } from './client-layout'
 
 // Initialize Unbounded font
 const unbounded = Unbounded({
@@ -34,7 +29,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Removed pathname logic
   return (
     <html lang="en" className="bg-black" suppressHydrationWarning>
       <head>
@@ -46,15 +40,9 @@ export default function RootLayout({
         className={`${unbounded.variable} font-sans min-h-screen bg-black text-white relative`} 
         suppressHydrationWarning={true} 
       >
-        {/* Wrap content with ThemeProvider */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false} // Disable system theme detection for simplicity
-        >
-          <Header /> 
+        <ClientLayout>
           {children}
-        </ThemeProvider>
+        </ClientLayout>
       </body>
     </html>
   )
