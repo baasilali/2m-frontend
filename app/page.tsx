@@ -12,12 +12,12 @@ export default function Home() {
       
       <div className="flex flex-col items-center flex-1 z-10 w-full max-w-6xl px-4 py-16 md:py-24 gap-16 md:gap-24">
         
-        <div className="flex flex-col justify-start items-center text-center min-h-screen pt-24">
+        <div className="flex flex-col justify-start items-center text-center min-h-100 pt-24">
           <h2 className="text-6xl font-bold mb-16">
-            a cs <span className="bg-gradient-to-r from-color-1 via-brand to-color-2 bg-clip-text text-transparent bg-200% animate-gradient-text">2m</span>arketplace.
+            a cs <span className="bg-gradient-to-r from-color-3 via-brand to-color-1 bg-clip-text text-transparent bg-200% animate-gradient-text">2m</span>arketplace.
           </h2>
           <div className="flex flex-col items-center">
-            <p className="text-lg text-gray-400 leading-relaxed max-w-md mb-4">
+            <p className="text-lg text-gray-400 leading-relaxed max-w-md mb-5">
               The premiere platform for AI-powered digital asset trading. 
             </p>
             <div className="flex items-center space-x-4"> 

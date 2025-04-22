@@ -206,13 +206,11 @@ export function CounterStrikeChat() {
     setCurrentSession(null)
     setActiveChat(false)
 
-    // Show background animations
-    setBackgroundVisible(true)
+    // Keep background hidden in new chat mode
+    setBackgroundVisible(false)
 
     // Keep inSession true if we've already had at least one session
-    if (!initialState) {
-      setInSession(true)
-    }
+    setInSession(true)
   }
 
   const selectSession = (session: ChatSession) => {
@@ -249,7 +247,7 @@ export function CounterStrikeChat() {
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
-            className="flex flex-col justify-start items-center w-full max-w-4xl h-full mx-auto p-4 mt-40 space-y-4 overflow-hidden"
+            className="flex flex-col justify-center items-center w-full max-w-4xl h-full mx-auto px-4 py-4 space-y-4 overflow-hidden"
           >
             <TextShimmer as="h1" className="text-4xl font-bold mb-0">
               Everything Counter Strike
@@ -258,7 +256,7 @@ export function CounterStrikeChat() {
               Ask about skin prices, market trends, or anything else.
             </p>
 
-            <div className="w-3/4 mx-auto mt-auto">
+            <div className="w-2/3 mx-auto mt-auto">
               <div className="relative bg-neutral-900 rounded-xl border border-neutral-800">
                 <div className="overflow-y-auto">
                   <Textarea
@@ -320,16 +318,16 @@ export function CounterStrikeChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex w-full h-[calc(100vh-5rem)]"
+            className="flex w-full h-[calc(100vh-5rem)] pt-0"
           >
             {/* Sidebar */}
             <motion.div
               className={cn(
                 "bg-neutral-900 border-r border-neutral-800 h-full transition-all duration-300 flex flex-col",
-                sidebarOpen ? "w-64" : "w-20",
+                sidebarOpen ? "w-56" : "w-16",
               )}
-              initial={{ width: sidebarOpen ? 256 : 80 }}
-              animate={{ width: sidebarOpen ? 256 : 80 }}
+              initial={{ width: sidebarOpen ? 224 : 64 }}
+              animate={{ width: sidebarOpen ? 224 : 64 }}
             >
               <div className="p-3 flex items-center justify-between border-b border-neutral-800">
                 <div className="flex items-center gap-2">
@@ -407,9 +405,26 @@ export function CounterStrikeChat() {
                       </p>
                     </motion.div>
                   )}
+                  
+                  {/* Show this when "New Chat" is clicked - no current session but in session mode */}
+                  {inSession && !currentSession && !backgroundVisible && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex flex-col items-center justify-center h-full gap-4"
+                    >
+                      <h1 className="text-3xl font-bold text-white">
+                        How can I help you?
+                      </h1>
+                      <p className="text-gray-400 text-center max-w-2xl">
+                        Ask about skin prices, market trends, or anything else.
+                      </p>
+                    </motion.div>
+                  )}
                 </AnimatePresence>
                 {currentSession && (
-                  <div className="w-3/4 mx-auto">
+                  <div className="w-2/3 mx-auto">
                     {currentSession.messages.map((message) => (
                       <div
                         key={message.id}
@@ -430,7 +445,7 @@ export function CounterStrikeChat() {
                 )}
               </div>
               <div className="flex-none p-4">
-                <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-3/4 mx-auto">
+                <div className="relative bg-neutral-900 rounded-xl border border-neutral-800 w-2/3 mx-auto">
                   <div className="overflow-y-auto">
                     <Textarea
                       ref={textareaRef}
