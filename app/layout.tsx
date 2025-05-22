@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Unbounded } from 'next/font/google'
 import './globals.css'
 import { ClientLayout } from './client-layout'
+import { AuthProvider } from "@/lib/authContext";
 
 // Initialize Unbounded font
 const unbounded = Unbounded({
@@ -40,9 +41,11 @@ export default function RootLayout({
         className={`${unbounded.variable} font-sans min-h-screen bg-black text-white relative`} 
         suppressHydrationWarning={true} 
       >
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <AuthProvider>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
+        </AuthProvider>
       </body>
     </html>
   )
