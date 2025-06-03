@@ -42,9 +42,9 @@ export default function RootLayout({
         suppressHydrationWarning={true} 
       >
         <AuthProvider>
-          <ClientLayout>
-            {children}
-          </ClientLayout>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
         </AuthProvider>
       </body>
     </html>

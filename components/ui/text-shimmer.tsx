@@ -21,7 +21,7 @@ const TextShimmer = forwardRef<HTMLDivElement, TextShimmerProps>(
     spread = 2,
     targetClass,
   }, ref) => {
-    const MotionComponent = motion(Component as keyof JSX.IntrinsicElements);
+    const MotionComponent = motion.create(Component as keyof JSX.IntrinsicElements);
 
     const dynamicSpread = useMemo(() => {
       return children.length * spread;

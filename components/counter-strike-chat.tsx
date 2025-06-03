@@ -5,7 +5,7 @@ import type React from "react"
 import { useEffect, useRef, useCallback, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { ArrowUpIcon, Paperclip, MessageSquarePlus, MessageSquare, Minimize2, User } from "lucide-react"
+import { ArrowUpIcon, Paperclip, MessageSquarePlus, MessageSquare, Minimize2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TextShimmer } from "@/components/ui/text-shimmer"
 
@@ -369,21 +369,6 @@ export function CounterStrikeChat() {
                   ))}
                 </div>
               </div>
-
-              {/* User Profile Section */}
-              {sidebarOpen && (
-                <div className="p-3 border-t border-neutral-800">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center">
-                      <User className="w-5 h-5 text-neutral-400" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-white">Guest</span>
-                      <span className="text-xs text-neutral-400">Free Account</span>
-                    </div>
-                  </div>
-                </div>
-              )}
             </motion.div>
 
             {/* Chat Area */}
