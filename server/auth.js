@@ -178,7 +178,7 @@ app.get('/api/steam/inventory/:steamId', async (req, res) => {
             console.log(`No description found for asset: ${asset.assetid}`);
             return null;
           }
-          
+
           // Get item details
           const marketName = description.market_hash_name || description.name || 'Unknown Item';
           const name = description.market_name || description.name || 'Unknown Item';
@@ -207,7 +207,8 @@ app.get('/api/steam/inventory/:steamId', async (req, res) => {
           console.error('Error processing item:', itemError);
           return null;
         }
-      }).filter(Boolean); // Remove null items
+      }).filter(Boolean) // Remove null items
+        .filter(item => item.tradable); // Only keep tradable items
       
       return res.json({ success: true, items });
     } else {

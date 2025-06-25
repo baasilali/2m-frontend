@@ -16,6 +16,7 @@ type InventoryItem = {
   exterior?: string;
   type: string;
   price?: string;
+  tradable: boolean;
 };
 
 export default function InventoryPage() {
@@ -73,7 +74,8 @@ export default function InventoryPage() {
             rarity: item.rarity || 'Common',
             exterior: item.exterior || undefined,
             type: item.type || 'Other',
-            price: "Market Price" // Placeholder
+            price: "Market Price", // Placeholder
+            tradable: item.tradable ?? true
           }));
         
         console.log(`Processed ${items.length} inventory items`);
@@ -94,8 +96,9 @@ export default function InventoryPage() {
     }
   };
 
-  // Filter items based on selected category
+  // Filter items based on selected category and only tradable
   const filteredItems = inventoryItems.filter(item => {
+    if (!item.tradable) return false;
     if (filter === "all") return true;
     if (!item.type) return false;
     return item.type.toLowerCase() === filter.toLowerCase();
