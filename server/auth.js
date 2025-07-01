@@ -183,6 +183,8 @@ app.get('/api/steam/inventory/:steamId', async (req, res) => {
           const marketName = description.market_hash_name || description.name || 'Unknown Item';
           const name = description.market_name || description.name || 'Unknown Item';
           const type = getItemType(description);
+          // Log tags for debugging
+          console.log('Item tags for', name, ':', JSON.stringify(description.tags));
           const rarity = getItemRarity(description);
           const exterior = getItemExterior(marketName);
           
@@ -262,9 +264,13 @@ function getItemType(description) {
 // Helper function to determine item rarity
 function getItemRarity(description) {
   const tags = description.tags || [];
-  const rarityTag = tags.find(tag => tag.category === 'Rarity');
-  
-  return (rarityTag && rarityTag.name) ? rarityTag.name.replace('Rarity_', '') : 'Common';
+  // Try to find the tag with category 'Rarity' or 'Quality' (sometimes used for music kits, etc.)
+  const rarityTag = tags.find(tag => tag.category === 'Rarity') || tags.find(tag => tag.category === 'Quality');
+  // Use the tag's localized_tag_name if available, otherwise name
+  if (rarityTag) {
+    return rarityTag.localized_tag_name || rarityTag.name;
+  }
+  return 'Common';
 }
 
 // Helper function to extract item exterior (wear)
